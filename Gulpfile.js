@@ -223,7 +223,7 @@ gulp.task('assets:watch', function() {
   /* Rebuild javascripts on-the-fly */
   gulp.watch([
     'assets/javascripts/**/*.js',
-    'bower_components/**/*.js'
+    'bower.json'
   ], ['assets:javascripts']);
 
   /* Minify views on-the-fly */
