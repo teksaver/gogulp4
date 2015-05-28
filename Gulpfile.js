@@ -240,7 +240,22 @@ gulp.task('assets:watch', function() {
  * Build application server.
  */
 gulp.task('server:build', function() {
-  return child.spawnSync('go', ['install']);
+  var build = child.spawnSync('go', ['install']);
+  if (build.stderr.length) {
+    var lines = build.stderr.toString()
+      .split('\n').filter(function(line) {
+        return line.length
+      });
+    for (var l in lines)
+      util.log(util.colors.red(
+        'Error (go install): ' + lines[l]
+      ));
+    notifier.notify({
+      title: 'Error (go install)',
+      message: lines
+    });
+  }
+  return build;
 });
 
 /*
