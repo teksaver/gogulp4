@@ -28,7 +28,6 @@ var gulp       = require('gulp');
 var addsrc     = require('gulp-add-src');
 var args       = require('yargs').argv;
 var autoprefix = require('autoprefixer-core');
-var cache      = require('gulp-cached');
 var clean      = require('del');
 var collect    = require('gulp-rev-collector');
 var concat     = require('gulp-concat');
@@ -156,8 +155,7 @@ gulp.task('assets:views', args.production ? [
   return gulp.src([
     'manifest.json',
     'views/**/*.tmpl'
-  ]).pipe(cache('views'))
-    .pipe(gulpif(args.production, collect()))
+  ]).pipe(gulpif(args.production, collect()))
     .pipe(
       minhtml({
         collapseBooleanAttributes: true,
