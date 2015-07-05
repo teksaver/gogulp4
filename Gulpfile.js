@@ -150,17 +150,14 @@ gulp.task('assets:modernizr', function() {
  * Minify views.
  */
 gulp.task('assets:views', args.production ? [
-  'assets:stylesheets',
-  'assets:javascripts',
-  'assets:modernizr',
   'assets:revisions:clean',
   'assets:revisions'
 ] : [], function() {
-  return gulp.src(['views/**/*.tmpl'])
-    .pipe(cache('views'))
-    .pipe(gulpif(args.production, collect()
-      manifest: gulp.src('public/rev-manifest.json')
-    ))
+  return gulp.src([
+    'manifest.json',
+    'views/**/*.tmpl'
+  ]).pipe(cache('views'))
+    .pipe(gulpif(args.production, collect()))
     .pipe(
       minhtml({
         collapseBooleanAttributes: true,
@@ -187,17 +184,14 @@ gulp.task('assets:revisions:clean', function() {
  * Revision assets after build.
  */
 gulp.task('assets:revisions', [
-  'assets:stylesheets',
-  'assets:javascripts',
-  'assets:modernizr',
   'assets:revisions:clean'
 ], function() {
   return gulp.src(['public/**/*.{css,js}'])
     .pipe(ignore.exclude(/-[a-f0-9]{8}\.(css|js)$/))
     .pipe(rev())
     .pipe(gulp.dest('public'))
-    .pipe(rev.manifest())
-    .pipe(gulp.dest('public'));
+    .pipe(rev.manifest('manifest.json'))
+    .pipe(gulp.dest('.'));
 })
 
 /*
